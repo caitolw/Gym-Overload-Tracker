@@ -449,6 +449,10 @@
           const [weight, setWeight] = useState(100); const [reps, setReps] = useState(6);
           const rm = weight && reps ? epley1RM(Number(weight), Number(reps)) : 0;
           const maxTableWeight = rm > 0 ? rm : 100;
+          
+          // Genera dinámicamente un array del 1 al 15 para renderizar todas las repeticiones
+          const repRows = Array.from({ length: 15 }, (_, i) => i + 1);
+
           return (
             <div className="space-y-4">
               <Card className="space-y-4">
@@ -464,11 +468,16 @@
               </Card>
               <Card className="space-y-3">
                  <h3 className="text-xs font-bold text-stone-400 uppercase tracking-wider">Equivalencias de Fuerza</h3>
-                 <div className="space-y-2.5 pt-1">
-                    <PlateBar label="1 Rep" weight={rm} maxWeight={maxTableWeight} highlight={reps === 1} />
-                    <PlateBar label="5 Reps" weight={epleyWeightForReps(rm, 5)} maxWeight={maxTableWeight} highlight={reps === 5} />
-                    <PlateBar label="8 Reps" weight={epleyWeightForReps(rm, 8)} maxWeight={maxTableWeight} highlight={reps === 8} />
-                    <PlateBar label="10 Reps" weight={epleyWeightForReps(rm, 10)} maxWeight={maxTableWeight} highlight={reps === 10} />
+                 <div className="space-y-2.5 pt-1 max-h-[350px] overflow-y-auto pr-1 scrollbar-none">
+                    {repRows.map((r) => (
+                      <PlateBar 
+                        key={r}
+                        label={`${r} Rep${r > 1 ? 's' : ''}`} 
+                        weight={epleyWeightForReps(rm, r)} 
+                        maxWeight={maxTableWeight} 
+                        highlight={reps === r} 
+                      />
+                    ))}
                  </div>
               </Card>
             </div>
